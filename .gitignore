@@ -21,3 +21,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#ide folder
+.idea/
+
+#ignore spotify service while api key in there
+SpotifyService.js
