@@ -1,9 +1,7 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import SpotifyService from './SpotifyService.js';
 import Graph from './Graph.js';
-import {Sigma, RelativeSize, RandomizeNodePositions} from 'react-sigma';
 
 class App extends React.Component {
   state = {
@@ -45,25 +43,34 @@ class App extends React.Component {
 
   render() {
         return(
-            <div className="wrapper">
+            <div className="container-fluid h-100">
                 {
                     !this.state.initial_artist &&
-                    <div>
-                        <h1>
-
-                        </h1>
-                        <input onChange={(event) => this.setState({
-                            searchQuery: event.target.value
-                        })}
-                               value={this.state.searchQuery}
-                               placeholder="Enter an artist to start your graph"/>
-                        <button
-                            onClick={
-                                () => {
-                                    this.setInitialArtist(this.state.searchQuery);
-                                }}>
-                            Explore
-                        </button>
+                    <div className="row h-100">
+                        <div className="col-2"></div>
+                        <div className="col-8">
+                            <div className="home-group">
+                                <p className="text-center">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque turpis dui, pellentesque nec dapibus eu, semper ut purus. Pellentesque tristique mattis ultricies.
+                                </p>
+                                <div className="row">
+                                    <div className="col-1"></div>
+                                    <input className="col-8 mr-1"
+                                        onChange={(event) => this.setState({
+                                        searchQuery: event.target.value
+                                    })}
+                                           value={this.state.searchQuery}
+                                           placeholder="Artist name..."/>
+                                    <button className="col-2"
+                                        onClick={
+                                            () => {
+                                                this.setInitialArtist(this.state.searchQuery);
+                                            }}>
+                                        Go
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 }
                 {

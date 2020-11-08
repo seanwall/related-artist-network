@@ -7,10 +7,25 @@
   pointer-events: none;
 }
 
+button {
+  border: none;
+  background-color: cadetblue;
+  color: white;
+  transition-duration: 0.2s;
+}
+
+button:hover {
+  background-color: skyblue;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+.home-group {
+  margin-top: 20%;
 }
 
 .wrapper {
