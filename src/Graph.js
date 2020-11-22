@@ -1,9 +1,31 @@
 import React from 'react';
 import * as d3 from 'd3';
 import SpotifyService from "./SpotifyService";
+import Node from './Node.js';
+import './Graph.css'
 
-const width = 960;
-const height = 500;
+const width = 2000;
+const height = 2000;
+
+//Node object structure:
+/*
+    {
+        id: String,
+        name: String,
+        popularity: Number,
+        x: Number,
+        y: Number
+    }
+ */
+
+//Edge object structure:
+/*
+    {
+        id: String,
+        source: String,
+        target: String
+    }
+ */
 
 export default class Graph extends React.Component {
     constructor(props) {
@@ -11,12 +33,15 @@ export default class Graph extends React.Component {
     }
 
     //Storing nodes and edges outside of state as we'll be managing rendering manually
-    //on D3 force simulation ticks (doesnt play nice with react trying to control rendering
-    //on state changes)
+    //as D3 force simulation ticks (doesnt play nice with react trying to control rendering
+    //when state changes)
     nodes = [];
     edges = [];
 
     componentDidMount() {
+        //Center visualization when initialized, accounting for window size
+        window.scrollTo(width/2 - (window.innerWidth/2), height/2 - (window.innerHeight/2))
+
         const initial_node = {
             id: this.props.initial_artist.id,
             name: this.props.initial_artist.name,
@@ -28,27 +53,43 @@ export default class Graph extends React.Component {
 
         this.expandGraph(initial_node).then(response => {
             //Don't start force simulation until graph is populated from spotify query
-            this.startD3Simulation()
+            this.startD3Simulation(true)
         })
     }
 
-    startD3Simulation() {
+    //Initializes D3 force simulation with this graph's current nodes,
+    startD3Simulation(is_initial) {
         let force = d3.forceSimulation(this.nodes)
-            .force("charge", d3.forceManyBody().strength(-50))
+            .force("charge", d3.forceManyBody().strength(-1000))
             .force("link", d3.forceLink(this.edges).id(n => n.id).distance(90))
-            .force("center", d3.forceCenter().x(width / 2).y(height / 2))
-            .force("collide", d3.forceCollide([5]).iterations([5]));
-        //TODO DOES FORCE 'STOP' ONCE NODES ARE SETTLED?
+            .force("collide", d3.forceCollide([25]).iterations([5]))
+        //Want subsequent node explorations to be drawn in direction of explored node,
+        //so only add centering force on initial render
+        if(is_initial) {
+            force = force.force("center", d3.forceCenter().x(width / 2).y(height / 2))
+        }
+
         force.on('tick', () => {
-            //Forcing update on each tick as long as nodes are being positioned by force simulation
+            //Forcing re-render on each tick of the force simulation
             this.forceUpdate()
         });
+        force.on('end', () => {
+            this.nodes = this.nodes.map((node) => {
+                return {
+                    ...node,
+                    'fx': node.x,
+                    'fy': node.y
+                }
+            })
+            console.log(this.nodes)
+        })
     }
 
+    //Expands the graph with given node's related artists and triggers the force simulation
     expandNode(node) {
         this.expandGraph(node).then(response => {
             //Don't start force simulation until graph is updated from spotify query
-            this.startD3Simulation()
+            this.startD3Simulation(false)
         })
     }
 
@@ -84,15 +125,11 @@ export default class Graph extends React.Component {
     }
 
     render() {
-        let nodes = this.nodes.map((node) => {
-            const transform = 'translate(' + node.x + ',' + node.y + ')';
-            return (
-                <g className='node' key={node.id} transform={transform}>
-                    <circle r={5} onClick={() => this.expandNode(node)}/>
-                    <text x={5 + 5} dy='.35em'>{node.name}</text>
-                </g>
+        //Manually forcing react to render whenever force sim ticks, so we manually position nodes/edges
+        //here on each re-render
+        let nodes = this.nodes.map((node) =>
+                <Node node={node} expand={() => this.expandNode(node)}/>
             );
-        });
         let links = this.edges.map((edge) => {
             return (
                 <line className='link' key={edge.id} stroke={'black'} strokeWidth={.5}
@@ -100,7 +137,7 @@ export default class Graph extends React.Component {
             );
         });
         return (
-            <svg className='graph' width={width} height={height}>
+            <svg className='graph' width={width} height={height} overflow={"auto"}>
                 <g>
                     {links}
                     {nodes}

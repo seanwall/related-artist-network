@@ -1,0 +1,8 @@
+.node{
+    fill: black;
+}
+
+.node-active{
+    fill:cadetblue;
+    cursor: pointer;
+}
