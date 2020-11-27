@@ -43,10 +43,10 @@ class App extends React.Component {
 
   render() {
         return(
-            <div className="container-fluid h-100">
+            <div className="container-fluid h-100 p-0">
                 {
                     !this.state.initial_artist &&
-                    <div className="row h-100">
+                    <div className="row h-100 no-gutters">
                         <div className="col-2"></div>
                         <div className="col-8">
                             <div className="home-group">
