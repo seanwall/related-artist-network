@@ -59,13 +59,20 @@ export default class Node extends React.Component {
         const className = this.state.mouseOver ? 'node-active':'node'
         const radius = this.props.node.popularity/4
         const x_offset = this.props.node.name.length * -4
+        console.log(window.pageYOffset)
         return (
-            <g className={className} key={this.props.node.id} transform={transform}
+            <g className={className} key={this.props.node.id}
                 onClick={() => this.props.expand()}
                 onMouseEnter={() => this.handleMouseEvent('enter')}
                 onMouseLeave={() => this.handleMouseEvent('leave')}>
-                <circle className={className} r={radius}></circle>
-                <text y={radius + 7} x={x_offset} dy='.35em'>{this.props.node.name}</text>
+                {
+                    this.state.mouseOver &&
+                    <text y={window.pageYOffset + 20} x={window.pageXOffset + window.innerWidth/2 + x_offset}>
+                        {this.props.node.name} - {this.previewTitle}
+                    </text>
+                }
+                <circle transform={transform} className={className} r={radius}></circle>
+                <text y={this.props.node.y + radius + 7} x={this.props.node.x + x_offset} dy='.35em'>{this.props.node.name}</text>
             </g>)
     }
 }
