@@ -56,7 +56,7 @@ class App extends React.Component {
                         <div className="col-8">
                             <div className="home-group">
                                 <p className="text-center">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque turpis dui, pellentesque nec dapibus eu, semper ut purus. Pellentesque tristique mattis ultricies.
+                                    Enter an artist name to start a graph. Pellentesque turpis dui, pellentesque nec dapibus eu, semper ut purus. Pellentesque tristique mattis ultricies.
                                 </p>
                                 <div className="row">
                                     <div className="col-1"></div>
