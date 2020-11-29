@@ -36,7 +36,6 @@ export default class Node extends React.Component {
     handleMouseEvent = (mouse_action) => {
         switch(mouse_action) {
             case 'enter':
-                console.log(this.previewTitle)
                 this.setState({
                     mouseOver: true
                 })
@@ -59,7 +58,6 @@ export default class Node extends React.Component {
         const className = this.state.mouseOver ? 'node-active':'node'
         const radius = this.props.node.popularity/4
         const x_offset = this.props.node.name.length * -4
-        console.log(window.pageYOffset)
         return (
             <g className={className} key={this.props.node.id}
                 onClick={() => this.props.expand()}
