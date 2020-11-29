@@ -14,7 +14,8 @@ const height = 2000;
         name: String,
         popularity: Number,
         x: Number,
-        y: Number
+        y: Number,
+        preview_url_promise: Promise<String>
     }
  */
 
@@ -38,6 +39,10 @@ export default class Graph extends React.Component {
     nodes = [];
     edges = [];
 
+    force = null;
+
+    firstSim = true;
+
     componentDidMount() {
         //Center visualization when initialized, accounting for window size
         window.scrollTo(width/2 - (window.innerWidth/2), height/2 - (window.innerHeight/2))
@@ -47,33 +52,50 @@ export default class Graph extends React.Component {
             name: this.props.initial_artist.name,
             popularity: this.props.initial_artist.popularity,
             x: 0,
-            y: 0
+            y: 0,
+            track_promise: this.props.initial_artist.track_promise
         }
         this.nodes = [initial_node]
 
         this.expandGraph(initial_node).then(response => {
             //Don't start force simulation until graph is populated from spotify query
-            this.startD3Simulation(true)
+            this.startD3Simulation()
         })
     }
 
-    //Initializes D3 force simulation with this graph's current nodes,
-    startD3Simulation(is_initial) {
-        let force = d3.forceSimulation(this.nodes)
+    //Initializes D3 force simulation and sets 'tick' and 'end' triggers
+    startD3Simulation() {
+        this.force = d3.forceSimulation(this.nodes)
             .force("charge", d3.forceManyBody().strength(-1000))
             .force("link", d3.forceLink(this.edges).id(n => n.id).distance(90))
             .force("collide", d3.forceCollide([25]).iterations([5]))
-        //Want subsequent node explorations to be drawn in direction of explored node,
-        //so only add centering force on initial render
-        if(is_initial) {
-            force = force.force("center", d3.forceCenter().x(width / 2).y(height / 2))
-        }
+            .force("center", d3.forceCenter().x(width / 2).y(height / 2))
 
-        force.on('tick', () => {
-            //Forcing re-render on each tick of the force simulation
+        //Forcing re-render on each tick of the force simulation
+        this.force.on('tick', () => {
             this.forceUpdate()
         });
-        force.on('end', () => {
+
+        // this.force.on('end', () => {
+        //     //Fix nodes once simulation ends
+        //     this.nodes = this.nodes.map((node) => {
+        //         return {
+        //             ...node,
+        //             'fx': node.x,
+        //             'fy': node.y
+        //         }
+        //     })
+        //     //Remove centering force once simulation ends (only really matters for first simulation)
+        //     this.force.force("center", null)
+        //     console.log(this.nodes)
+        // })
+    }
+
+    //Expands the graph with given node's related artists and triggers the force simulation
+    expandNode(node) {
+        // if(this.firstSim) {
+        //     this.firstSim = false
+            //Fix nodes and remove centering force once a new node is expanded
             this.nodes = this.nodes.map((node) => {
                 return {
                     ...node,
@@ -81,15 +103,13 @@ export default class Graph extends React.Component {
                     'fy': node.y
                 }
             })
-            console.log(this.nodes)
-        })
-    }
-
-    //Expands the graph with given node's related artists and triggers the force simulation
-    expandNode(node) {
+            this.force.force("center", null)
+        //}
         this.expandGraph(node).then(response => {
-            //Don't start force simulation until graph is updated from spotify query
-            this.startD3Simulation(false)
+            //Update force simulation with new set of nodes & edges and restart simulation
+            this.force.nodes(this.nodes)
+            this.force.force("link").links(this.edges)
+            this.force.alpha(1).restart();
         })
     }
 
@@ -97,9 +117,13 @@ export default class Graph extends React.Component {
         return SpotifyService.getRelatedArtists(artist_id).then(response => response.artists)
     }
 
+    getTrackForArtist = (artist_id) => {
+        return SpotifyService.getTopTracks(artist_id).then(response => response.tracks[0])
+    }
+
     //Given an artist node, retrieves related artists for that artist, adds new nodes and edges to the graph as needed
     expandGraph = (expanded_node) => {
-        return this.getRelatedArtists(expanded_node.id).then(related_artists => {
+        return this.getRelatedArtists(expanded_node.id).then((related_artists) => {
             let new_nodes = []
             let new_edges = []
 
@@ -107,7 +131,20 @@ export default class Graph extends React.Component {
                 const new_node_id = artist.id;
                 //Check for node dupes
                 if(!this.nodes.some((existing_node) => existing_node.id === artist.id)) {
-                    new_nodes.push({id:artist.id, name:artist.name, popularity:artist.popularity, x: 0, y:0});
+                    //Want spotify get track calls to happen asynchronously, so that nodes can be
+                    //animated without waiting for all calls - give nodes the preview url promise
+                    //so that preview url can be resolved later
+                    let track_promise = this.getTrackForArtist(artist.id).then(track => track)
+                    let artist_node = {
+                        id:artist.id,
+                        name:artist.name,
+                        popularity:artist.popularity,
+                        x: 0,
+                        y:0,
+                        track_promise: track_promise
+                    }
+                    new_nodes.push(artist_node)
+                    //Start getTrack spotify call asynchronously, will mutate node when promise resolves
                 }
                 const new_edge_id = `e${expanded_node.id}-${new_node_id}`
                 //Check for edge dupes
@@ -116,11 +153,8 @@ export default class Graph extends React.Component {
                 }
             })
 
-            const nodes = this.nodes.concat(new_nodes)
-            const edges = this.edges.concat(new_edges)
-
-            this.nodes = nodes;
-            this.edges = edges;
+            this.nodes = this.nodes.concat(new_nodes)
+            this.edges = this.edges.concat(new_edges)
         })
     }
 
@@ -136,6 +170,7 @@ export default class Graph extends React.Component {
                       x1={edge.source.x} x2={edge.target.x} y1={edge.source.y} y2={edge.target.y} />
             );
         });
+
         return (
             <svg className='graph' width={width} height={height} overflow={"auto"}>
                 <g>

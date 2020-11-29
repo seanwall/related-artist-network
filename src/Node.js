@@ -1,32 +1,55 @@
 import React from 'react';
 import './Node.css'
 
-const preview = 'https://p.scdn.co/mp3-preview/803b657c8914456ca28dfddc0add7cdad456cdac?cid=1ca97f5a0d494fcfbfb20b112a8d552f'
-
 export default class Node extends React.Component {
     state = {
-        mouseOver: false
+        mouseOver: false,
     }
-    audio = new Audio(preview)
+
+    previewAudio = new Audio()
+    previewTitle = ""
 
     constructor(props) {
         super(props)
     }
 
+    componentDidMount() {
+        //Preview URL is populated asynchronously in Graph.js so that rendering can take place without
+        //waiting for spotify requests, need to wait for preview url promise to resolve before creating
+        //preview audio object
+        this.props.node.track_promise.then(track => {
+            if (track) {
+                if (track.preview_url) this.previewAudio = new Audio(track.preview_url)
+                this.previewTitle = track.name
+            }
+
+        })
+        //TODO - This is a little messy - maybe just populate node component with a promise for the preview url?
+        // (async() => {
+        //     while(!this.props.node.preview_url) {
+        //         await new Promise(resolve => setTimeout(resolve,500))
+        //     }
+        //     this.previewAudio = new Audio(this.props.node.preview_url)
+        // })()
+    }
+
     handleMouseEvent = (mouse_action) => {
         switch(mouse_action) {
             case 'enter':
+                console.log(this.previewTitle)
                 this.setState({
                     mouseOver: true
                 })
-                this.audio.play()
+                setTimeout(() => {
+                    if (this.state.mouseOver) this.previewAudio.play()
+                }, 500)
                 break;
             case 'leave':
                 this.setState({
                     mouseOver: false
                 })
-                this.audio.pause()
-                this.audio.currentTime = 0
+                this.previewAudio.pause()
+                this.previewAudio.currentTime = 0
                 break;
         }
     }

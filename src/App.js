@@ -18,6 +18,10 @@ class App extends React.Component {
       return SpotifyService.searchArtists(search_query).then(response => response.artists.items)
   }
 
+  getTrackForArtist = (artist_id) => {
+        return SpotifyService.getTopTracks(artist_id).then(response => response.tracks[0])
+  }
+
   //Given a search query, retrieves artists from spotify and creates an initial node for the graph
   setInitialArtist = (search_query) => {
     if(!search_query) {
@@ -33,8 +37,9 @@ class App extends React.Component {
             else {
                 //TODO CURRENTLY TAKING FIRST ARTIST, GIVE OPTIONS?
                 const artist_obj = artist_arr[0]
+                let track_promise = this.getTrackForArtist(artist_obj.id).then(track => track)
                 this.setState({
-                    initial_artist: artist_obj
+                    initial_artist: {... artist_obj, track_promise: track_promise}
                 })
             }
         })
