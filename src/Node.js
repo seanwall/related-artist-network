@@ -29,6 +29,7 @@ export default class Node extends React.Component {
     handleMouseEvent = (mouse_action) => {
         switch(mouse_action) {
             case 'enter':
+                this.props.setHovered(this.props.node.id)
                 this.setState({
                     mouseOver: true
                 })
@@ -38,6 +39,7 @@ export default class Node extends React.Component {
                 }, 500)
                 break;
             case 'leave':
+                this.props.setHovered(null)
                 this.setState({
                     mouseOver: false
                 })
@@ -47,9 +49,24 @@ export default class Node extends React.Component {
         }
     }
 
+    getClassName() {
+        if(this.state.mouseOver) {
+            return 'node-active'
+        }
+        else if(this.props.node.sources && this.props.node.sources.includes(this.props.hovered_node)) {
+            return 'node-child'
+        }
+        else if(this.props.node.targets && this.props.node.targets.includes(this.props.hovered_node)){
+            return 'node-parent'
+        }
+        else {
+            return 'node'
+        }
+    }
+
     render() {
         const transform = 'translate(' + this.props.node.x + ',' + this.props.node.y + ')';
-        const className = this.state.mouseOver ? 'node-active':'node'
+        const className = this.getClassName()
         const radius = this.props.node.popularity/4
         const x_offset = this.props.node.name.length * -4
         return (

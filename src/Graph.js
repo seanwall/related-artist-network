@@ -2,6 +2,7 @@ import React from 'react';
 import * as d3 from 'd3';
 import SpotifyService from "./SpotifyService";
 import Node from './Node.js';
+import Edge from './Edge.js';
 import './Graph.css'
 
 const width = 2000;
@@ -11,6 +12,8 @@ const height = 2000;
 /*
     {
         id: String,
+        sources: [String],
+        targets: [String], - Optional
         name: String,
         popularity: Number,
         x: Number,
@@ -33,6 +36,10 @@ export default class Graph extends React.Component {
         super(props)
     }
 
+    state = {
+        hovered_node: null
+    }
+
     //Storing nodes and edges outside of state as we'll be managing rendering manually
     //as D3 force simulation ticks (doesnt play nice with react trying to control rendering
     //when state changes)
@@ -49,6 +56,7 @@ export default class Graph extends React.Component {
 
         const initial_node = {
             id: this.props.initial_artist.id,
+            sources: [],
             name: this.props.initial_artist.name,
             popularity: this.props.initial_artist.popularity,
             x: 0,
@@ -61,6 +69,14 @@ export default class Graph extends React.Component {
             //Don't start force simulation until graph is populated from spotify query
             this.startD3Simulation()
         })
+    }
+
+    getRelatedArtists = (artist_id) => {
+        return SpotifyService.getRelatedArtists(artist_id).then(response => response.artists)
+    }
+
+    getTrackForArtist = (artist_id) => {
+        return SpotifyService.getTopTracks(artist_id).then(response => response.tracks[0])
     }
 
     //Initializes D3 force simulation and sets 'tick' and 'end' triggers
@@ -96,13 +112,16 @@ export default class Graph extends React.Component {
         // if(this.firstSim) {
         //     this.firstSim = false
             //Fix nodes and remove centering force once a new node is expanded
-            this.nodes = this.nodes.map((node) => {
-                return {
-                    ...node,
-                    'fx': node.x,
-                    'fy': node.y
-                }
+            this.nodes.map((node) => {
+                node.fx = node.x
+                node.fy = node.y
             })
+            //     return {
+            //         ...node,
+            //         'fx': node.x,
+            //         'fy': node.y
+            //     }
+            // })
             this.force.force("center", null)
         //}
         this.expandGraph(node).then(response => {
@@ -113,23 +132,20 @@ export default class Graph extends React.Component {
         })
     }
 
-    getRelatedArtists = (artist_id) => {
-        return SpotifyService.getRelatedArtists(artist_id).then(response => response.artists)
-    }
-
-    getTrackForArtist = (artist_id) => {
-        return SpotifyService.getTopTracks(artist_id).then(response => response.tracks[0])
-    }
-
     //Given an artist node, retrieves related artists for that artist, adds new nodes and edges to the graph as needed
     expandGraph = (expanded_node) => {
         return this.getRelatedArtists(expanded_node.id).then((related_artists) => {
             let new_nodes = []
             let new_edges = []
+            let targets = []
 
             related_artists.forEach(artist => {
                 const new_node_id = artist.id;
+                targets.push(new_node_id)
+
                 //Check for node dupes
+                this.nodes.filter((existing_node) => existing_node.id === artist.id)
+                          .map((existing_node) => existing_node.sources.push(expanded_node.id))
                 if(!this.nodes.some((existing_node) => existing_node.id === artist.id)) {
                     //Want spotify get track calls to happen asynchronously, so that nodes can be
                     //animated without waiting for all calls - give nodes the getTrack spotify call promise
@@ -137,6 +153,7 @@ export default class Graph extends React.Component {
                     let track_promise = this.getTrackForArtist(artist.id).then(track => track)
                     let artist_node = {
                         id:artist.id,
+                        sources: [expanded_node.id],
                         name:artist.name,
                         popularity:artist.popularity,
                         x: 0,
@@ -152,8 +169,16 @@ export default class Graph extends React.Component {
                 }
             })
 
+            expanded_node.targets = targets
+
             this.nodes = this.nodes.concat(new_nodes)
             this.edges = this.edges.concat(new_edges)
+        })
+    }
+
+    setHoveredNode = (node_id) => {
+        this.setState({
+            hovered_node: node_id
         })
     }
 
@@ -161,21 +186,27 @@ export default class Graph extends React.Component {
         //Manually forcing react to render whenever force sim ticks, so we manually position nodes/edges
         //here on each re-render
         let nodes = this.nodes.map((node) =>
-                <Node node={node} expand={() => this.expandNode(node)}/>
+                <Node node={node} expand={() => this.expandNode(node)} setHovered={this.setHoveredNode}
+                      hovered_node={this.state.hovered_node}/>
             );
-        let links = this.edges.map((edge) => {
+        let edges = this.edges.map((edge) => {
             return (
-                <line className='link' key={edge.id} stroke={'black'} strokeWidth={.5}
-                      x1={edge.source.x} x2={edge.target.x} y1={edge.source.y} y2={edge.target.y} />
+                <Edge edge={edge} hovered_node={this.state.hovered_node}/>
+                // <line className='link' key={edge.id} stroke={'black'} strokeWidth={.5}
+                //       x1={edge.source.x} x2={edge.target.x} y1={edge.source.y} y2={edge.target.y} />
             );
         });
+        //let graph_view = <GraphView expandNode={this.expandNode} width={width} height={height} nodes={this.nodes} edges={this.edges}/>
 
         return (
+            //<GraphView expandNode={this.expandNode} width={width} height={height} nodes={this.nodes} edges={this.edges}/>
             <svg className='graph' width={width} height={height} overflow={"auto"}>
                 <g>
-                    {links}
+                    {/*<GraphView nodes={nodes} links={links}></GraphView>*/}
+                    {edges}
                     {nodes}
                 </g>
+                {/*<GraphView expandNode={this.expandNode} width={width} height={height} nodes={this.nodes} edges={this.edges}/>*/}
             </svg>
         );
 

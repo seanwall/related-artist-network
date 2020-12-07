@@ -1,0 +1,18 @@
+.edge{
+    stroke: black;
+    stroke-width: .5;
+}
+
+.edge-active{
+    stroke:cadetblue;
+}
+
+.edge-parent{
+    stroke:slateblue;
+    stroke-width: 1;
+}
+
+.edge-child{
+    stroke:steelblue;
+    stroke-width: 1;
+}
