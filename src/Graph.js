@@ -15,7 +15,7 @@ const height = 2000;
         popularity: Number,
         x: Number,
         y: Number,
-        preview_url_promise: Promise<String>
+        track_promise: Promise<String>
     }
  */
 
@@ -132,8 +132,8 @@ export default class Graph extends React.Component {
                 //Check for node dupes
                 if(!this.nodes.some((existing_node) => existing_node.id === artist.id)) {
                     //Want spotify get track calls to happen asynchronously, so that nodes can be
-                    //animated without waiting for all calls - give nodes the preview url promise
-                    //so that preview url can be resolved later
+                    //animated without waiting for all calls - give nodes the getTrack spotify call promise
+                    //so that track url for preview can be resolved later
                     let track_promise = this.getTrackForArtist(artist.id).then(track => track)
                     let artist_node = {
                         id:artist.id,
@@ -144,7 +144,6 @@ export default class Graph extends React.Component {
                         track_promise: track_promise
                     }
                     new_nodes.push(artist_node)
-                    //Start getTrack spotify call asynchronously, will mutate node when promise resolves
                 }
                 const new_edge_id = `e${expanded_node.id}-${new_node_id}`
                 //Check for edge dupes

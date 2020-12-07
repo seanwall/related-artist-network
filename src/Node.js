@@ -14,8 +14,8 @@ export default class Node extends React.Component {
     }
 
     componentDidMount() {
-        //Preview URL is populated asynchronously in Graph.js so that rendering can take place without
-        //waiting for spotify requests, need to wait for preview url promise to resolve before creating
+        //Track URL is populated asynchronously in Graph.js so that rendering can take place without
+        //waiting for spotify requests, need to wait for track url promise to resolve before creating
         //preview audio object
         this.props.node.track_promise.then(track => {
             if (track) {
@@ -24,13 +24,6 @@ export default class Node extends React.Component {
             }
 
         })
-        //TODO - This is a little messy - maybe just populate node component with a promise for the preview url?
-        // (async() => {
-        //     while(!this.props.node.preview_url) {
-        //         await new Promise(resolve => setTimeout(resolve,500))
-        //     }
-        //     this.previewAudio = new Audio(this.props.node.preview_url)
-        // })()
     }
 
     handleMouseEvent = (mouse_action) => {
@@ -40,6 +33,7 @@ export default class Node extends React.Component {
                     mouseOver: true
                 })
                 setTimeout(() => {
+                    //Check that 'mouseOver' still true before playing audio
                     if (this.state.mouseOver) this.previewAudio.play()
                 }, 500)
                 break;
