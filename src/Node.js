@@ -6,7 +6,7 @@ export default class Node extends React.Component {
         mouseOver: false,
     }
 
-    previewAudio = new Audio()
+    previewAudio;
     previewTitle = ""
 
     constructor(props) {
@@ -33,18 +33,26 @@ export default class Node extends React.Component {
                 this.setState({
                     mouseOver: true
                 })
-                setTimeout(() => {
-                    //Check that 'mouseOver' still true before playing audio
-                    if (this.state.mouseOver) this.previewAudio.play()
-                }, 500)
+
+                if (this.previewAudio) {
+                    setTimeout(() => {
+                        //Check that 'mouseOver' still true before playing audio
+                        if (this.state.mouseOver) this.previewAudio.play()
+                    }, 500)
+                }
+
                 break;
             case 'leave':
                 this.props.setHovered(null)
                 this.setState({
                     mouseOver: false
                 })
-                this.previewAudio.pause()
-                this.previewAudio.currentTime = 0
+
+                if (this.previewAudio) {
+                    this.previewAudio.pause()
+                    this.previewAudio.currentTime = 0
+                }
+
                 break;
         }
     }
@@ -68,7 +76,9 @@ export default class Node extends React.Component {
         const transform = 'translate(' + this.props.node.x + ',' + this.props.node.y + ')';
         const className = this.getClassName()
         const radius = this.props.node.popularity/4
-        const x_offset = this.props.node.name.length * -4
+        const previewTextX = window.pageXOffset + window.innerWidth - 20
+        const previewTextY = window.pageYOffset + 20
+
         return (
             <g className={className} key={this.props.node.id}
                 onClick={() => this.props.expand()}
@@ -76,12 +86,16 @@ export default class Node extends React.Component {
                 onMouseLeave={() => this.handleMouseEvent('leave')}>
                 {
                     this.state.mouseOver &&
-                    <text y={window.pageYOffset + 20} x={window.pageXOffset + window.innerWidth/2 + x_offset}>
-                        {this.props.node.name} - {this.previewTitle}
+                    <text textAnchor={"end"}>
+                        <tspan y={previewTextY} x={previewTextX}>{this.props.node.name} - {this.previewTitle}</tspan>
+                        {
+                            !this.previewAudio &&
+                            <tspan fill="red" y={previewTextY + 17} x={previewTextX}>No preview track available</tspan>
+                        }
                     </text>
                 }
                 <circle transform={transform} className={className} r={radius}></circle>
-                <text y={this.props.node.y + radius + 7} x={this.props.node.x + x_offset} dy='.35em'>{this.props.node.name}</text>
+                <text textAnchor={"middle"} y={this.props.node.y + radius + 7} x={this.props.node.x} dy='.35em'>{this.props.node.name}</text>
             </g>)
     }
 }

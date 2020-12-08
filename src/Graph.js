@@ -191,9 +191,10 @@ export default class Graph extends React.Component {
         //  maybe bad performance wise now that 'hovered_node' is tracked in Graph state,
         //  but so far haven't seen any noticeable slow down
         let nodes = this.nodes.map((node) =>
-                <Node node={node} expand={() => this.expandNode(node)} setHovered={this.setHoveredNode}
-                      hovered_node={this.state.hovered_node}/>
-            );
+                    <Node node={node} expand={() => this.expandNode(node)} setHovered={this.setHoveredNode}
+                          hovered_node={this.state.hovered_node}/>
+                          );
+
         let edges = this.edges.map((edge) => {
             return (
                 <Edge edge={edge} hovered_node={this.state.hovered_node}/>

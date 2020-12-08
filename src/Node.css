@@ -5,6 +5,7 @@
 .node-active{
     fill:cadetblue;
     cursor: pointer;
+    position: relative;
 }
 
 .node-parent{
