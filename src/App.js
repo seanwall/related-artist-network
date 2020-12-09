@@ -60,7 +60,7 @@ class App extends React.Component {
                                 </p>
                                 <div className="row">
                                     <div className="col-1"></div>
-                                    <input className="col-8 mr-1"
+                                    <input className="col-8 mr-1 p-1"
                                         onChange={(event) => this.setState({
                                         searchQuery: event.target.value
                                     })}
@@ -80,7 +80,28 @@ class App extends React.Component {
                 }
                 {
                     this.state.initial_artist &&
-                    <Graph initial_artist={this.state.initial_artist}/>
+                    <div>
+                        <div className='svg-key m-1 p-2'>
+                            <p className='m-0'><b>Left-click</b> on an artist node to explore</p>
+                            <p className='m-0'><b>Hover</b> over an artist node to listen to an audio sample</p>
+                            <row>
+                                <input className='ml-2 col-8 p-1'
+                                    onChange={(event) => this.setState({
+                                        searchQuery: event.target.value
+                                    })}
+                                    value={this.state.searchQuery}
+                                    placeholder="Artist name..."/>
+                                <button className='ml-2 col-3'
+                                    onClick={
+                                        () => {
+                                            this.setInitialArtist(this.state.searchQuery);
+                                        }}>
+                                    Go
+                                </button>
+                            </row>
+                        </div>
+                        <Graph initial_artist={this.state.initial_artist}/>
+                    </div>
                 }
             </div>)
   }

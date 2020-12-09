@@ -52,6 +52,17 @@ export default class Graph extends React.Component {
     firstSim = true;
 
     componentDidMount() {
+        this.initializeNewGraph()
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.initial_artist !== prevProps.initial_artist){
+            this.initializeNewGraph()
+        }
+    }
+
+    //Creates initial node from prop passed from App.js,
+    initializeNewGraph = () => {
         // Center visualization when initialized, accounting for window size
         window.scrollTo(width/2 - (window.innerWidth/2), height/2 - (window.innerHeight/2))
 
@@ -64,7 +75,9 @@ export default class Graph extends React.Component {
             y: 0,
             track_promise: this.props.initial_artist.track_promise
         }
+        //Initializing nodes & edges - or resetting them if new Graph is being created
         this.nodes = [initial_node]
+        this.edges = []
 
         this.expandGraph(initial_node).then(response => {
             // Don't start force simulation until graph is populated from spotify query
