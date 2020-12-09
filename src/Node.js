@@ -18,7 +18,10 @@ export default class Node extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if(this.props.node !== prevProps.node) {
+        if(this.props.node.id !== prevProps.node.id) {
+            this.previewAudio = null;
+            this.previewTitle = "";
+
             this.initializePreview()
         }
     }
