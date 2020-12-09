@@ -57,8 +57,6 @@ export default class Graph extends React.Component {
 
     componentDidUpdate(prevProps) {
         if(this.props.initial_artist !== prevProps.initial_artist){
-            console.log(prevProps.initial_artist)
-            console.log(this.props.initial_artist)
             this.initializeNewGraph()
         }
     }
@@ -218,9 +216,9 @@ export default class Graph extends React.Component {
         // dynamically on hovering, I found easiest & cleanest solution was to draw base circles and
         // labels then redraw on top of those to highlight when necessary.
         let node_bed = this.nodes.map((node) =>
-                    <circle transform={this.getNodeTransform(node)}
-                            className={'node'}
-                            r={this.getRadius(node.popularity)}></circle>);
+                    <circle className={'node'}
+                            r={this.getRadius(node.popularity)}
+                            transform={this.getNodeTransform(node)}></circle>);
 
         let label_bed = this.nodes.map((node) => this.getLabelText(node));
 

@@ -92,7 +92,7 @@ export default class Node extends React.Component {
         const previewTextY = window.pageYOffset + 20
 
         return (
-            <g className={className} key={this.props.node.id}
+            <g className={className} id={this.props.node.id} key={this.props.node.id}
                 onClick={() => this.props.expand()}
                 onMouseLeave={() => this.handleMouseEvent('leave')}
                 onMouseOver={() => this.handleMouseEvent('over')}>

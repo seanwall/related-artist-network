@@ -6,7 +6,7 @@ import Graph from './Graph.js';
 class App extends React.Component {
   state = {
       initial_artist: null,
-      searchQuery: ''
+      search_query: ''
   }
 
   componentDidMount() {
@@ -30,6 +30,7 @@ class App extends React.Component {
     }
     else{
         this.searchArtists(search_query).then(artist_arr => {
+            this.setState({search_query: ''})
             if (artist_arr.length === 0) {
                 //TODO ERROR ALERT
                 console.log('No artists found search again')
@@ -62,14 +63,14 @@ class App extends React.Component {
                                     <div className="col-1"></div>
                                     <input className="col-8 mr-1 p-1"
                                         onChange={(event) => this.setState({
-                                        searchQuery: event.target.value
+                                        search_query: event.target.value
                                     })}
-                                           value={this.state.searchQuery}
+                                           value={this.state.search_query}
                                            placeholder="Artist name..."/>
                                     <button className="col-2"
                                         onClick={
                                             () => {
-                                                this.setInitialArtist(this.state.searchQuery);
+                                                this.setInitialArtist(this.state.search_query);
                                             }}>
                                         Go
                                     </button>
@@ -87,14 +88,14 @@ class App extends React.Component {
                             <div className='input-group input-group-sm'>
                                 <input className='form-control'
                                     onChange={(event) => this.setState({
-                                        searchQuery: event.target.value
+                                        search_query: event.target.value
                                     })}
-                                    value={this.state.searchQuery}
+                                    value={this.state.search_query}
                                     placeholder="Artist name..."/>
                                 <button className='ml-2 mr-1 col-3'
                                     onClick={
                                         () => {
-                                            this.setInitialArtist(this.state.searchQuery);
+                                            this.setInitialArtist(this.state.search_query);
                                         }}>
                                     Go
                                 </button>
