@@ -29,16 +29,18 @@ export default class Node extends React.Component {
     handleMouseEvent = (mouse_action) => {
         switch(mouse_action) {
             case 'enter':
-                this.props.setHovered(this.props.node.id)
-                this.setState({
-                    mouseOver: true
-                })
+                if(!this.state.mouseOver) {
+                    this.props.setHovered(this.props.node.id)
+                    this.setState({
+                        mouseOver: true
+                    })
 
-                if (this.previewAudio) {
-                    setTimeout(() => {
-                        //Check that 'mouseOver' still true before playing audio
-                        if (this.state.mouseOver) this.previewAudio.play()
-                    }, 500)
+                    if (this.previewAudio) {
+                        setTimeout(() => {
+                            //Check that 'mouseOver' still true before playing audio
+                            if (this.state.mouseOver) this.previewAudio.play()
+                        }, 500)
+                    }
                 }
 
                 break;
@@ -75,7 +77,7 @@ export default class Node extends React.Component {
     render() {
         const transform = 'translate(' + this.props.node.x + ',' + this.props.node.y + ')';
         const className = this.getClassName()
-        const radius = this.props.node.popularity/4
+        const radius = this.props.getRadius()
         const previewTextX = window.pageXOffset + window.innerWidth - 20
         const previewTextY = window.pageYOffset + 20
 
@@ -83,7 +85,8 @@ export default class Node extends React.Component {
             <g className={className} key={this.props.node.id}
                 onClick={() => this.props.expand()}
                 onMouseEnter={() => this.handleMouseEvent('enter')}
-                onMouseLeave={() => this.handleMouseEvent('leave')}>
+                onMouseLeave={() => this.handleMouseEvent('leave')}
+                onMouseOver={() => this.handleMouseEvent('enter')}>
                 {
                     this.state.mouseOver &&
                     <text textAnchor={"end"}>
@@ -95,7 +98,6 @@ export default class Node extends React.Component {
                     </text>
                 }
                 <circle transform={transform} className={className} r={radius}></circle>
-                <text textAnchor={"middle"} y={this.props.node.y + radius + 7} x={this.props.node.x} dy='.35em'>{this.props.node.name}</text>
-            </g>)
+                            </g>)
     }
 }

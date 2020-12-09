@@ -6,10 +6,6 @@ export default class Edge extends React.Component {
         super(props)
     }
 
-    // state = {
-    //     mouseOver: false
-    // }
-
     getClassName() {
         if(this.props.hovered_node === this.props.edge.source.id) {
             return 'edge-child'

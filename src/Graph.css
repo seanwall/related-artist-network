@@ -1,3 +1,8 @@
 .graph {
     background-color: aliceblue;
 }
+
+.hovered_underlay{
+    stroke: aliceblue;
+    stroke-width: .3em;
+}

@@ -184,6 +184,8 @@ export default class Graph extends React.Component {
         })
     }
 
+    getRadius = (popularity) => (popularity/5 + 2)
+
     render() {
         // Manually forcing react to render whenever force sim ticks, so we recreate nodes/edges
         // here on each re-render
@@ -191,8 +193,9 @@ export default class Graph extends React.Component {
         //  maybe bad performance wise now that 'hovered_node' is tracked in Graph state,
         //  but so far haven't seen any noticeable slow down
         let nodes = this.nodes.map((node) =>
-                    <Node node={node} expand={() => this.expandNode(node)} setHovered={this.setHoveredNode}
-                          hovered_node={this.state.hovered_node}/>
+                    <Node node={node} hovered_node={this.state.hovered_node}
+                          expand={() => this.expandNode(node)} setHovered={this.setHoveredNode}
+                          getRadius={() => this.getRadius(node.popularity)}/>
                           );
 
         let edges = this.edges.map((edge) => {
@@ -201,11 +204,33 @@ export default class Graph extends React.Component {
             );
         });
 
+        let hovered_label;
+        let labels = this.nodes.map((node) => {
+            let text = <text textAnchor={"middle"} y={node.y + this.getRadius(node.popularity) + 7} x={node.x}
+                             dy='.45em'>{node.name}</text>
+
+            if(this.state.hovered_node === node.id) {
+                return <g id={node.id}>
+                    {React.cloneElement(text, {className: "hovered_underlay"})}
+                    {React.cloneElement(text)}
+                </g>
+            }
+            else {
+                return text
+            }
+        });
+
         return (
             <svg className='graph' width={width} height={height} overflow={"auto"}>
                 <g>
                     {edges}
                     {nodes}
+                    {labels}
+                    {this.state.hovered_node &&
+                    <g>
+                        <use xlinkHref={`#${this.state.hovered_node}`}></use>
+                    </g>
+                    }
                 </g>
             </svg>
         );
