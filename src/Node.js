@@ -28,7 +28,7 @@ export default class Node extends React.Component {
 
     handleMouseEvent = (mouse_action) => {
         switch(mouse_action) {
-            case 'enter':
+            case 'over':
                 if(!this.state.mouseOver) {
                     this.props.setHovered(this.props.node.id)
                     this.setState({
@@ -70,12 +70,12 @@ export default class Node extends React.Component {
             return 'node-parent'
         }
         else {
-            return 'node'
+            return 'hidden-node'
         }
     }
 
     render() {
-        const transform = 'translate(' + this.props.node.x + ',' + this.props.node.y + ')';
+        const transform = this.props.getNodeTransform();
         const className = this.getClassName()
         const radius = this.props.getRadius()
         const previewTextX = window.pageXOffset + window.innerWidth - 20
@@ -84,9 +84,8 @@ export default class Node extends React.Component {
         return (
             <g className={className} key={this.props.node.id}
                 onClick={() => this.props.expand()}
-                onMouseEnter={() => this.handleMouseEvent('enter')}
                 onMouseLeave={() => this.handleMouseEvent('leave')}
-                onMouseOver={() => this.handleMouseEvent('enter')}>
+                onMouseOver={() => this.handleMouseEvent('over')}>
                 {
                     this.state.mouseOver &&
                     <text textAnchor={"end"}>

@@ -2,6 +2,10 @@
     fill: lightslategrey;
 }
 
+.hidden-node{
+    opacity: 0
+}
+
 .node-active{
     fill:cadetblue;
     cursor: pointer;

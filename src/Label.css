@@ -1,0 +1,19 @@
+.label-underlay{
+    stroke: white;
+    stroke-width: .1em;
+}
+
+.active-label{
+    stroke: cadetblue;
+    stroke-width: .3em;
+}
+
+.parent-label{
+    stroke: slateblue;
+    stroke-width: .3em;
+}
+
+.child-label{
+    stroke: steelblue;
+    stroke-width: .3em;
+}

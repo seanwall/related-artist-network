@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import SpotifyService from "./SpotifyService";
 import Node from './Node.js';
 import Edge from './Edge.js';
+import Label from './Label.js';
 import './Graph.css'
 
 const width = 2000;
@@ -184,51 +185,68 @@ export default class Graph extends React.Component {
         })
     }
 
+    // Rendering calculations for nodes used for base nodes in Graph render and in Node component rendering
     getRadius = (popularity) => (popularity/5 + 2)
+    getLabelText = (node) => <text textAnchor={"middle"} y={node.y + this.getRadius(node.popularity) + 7} x={node.x} dy='.5em'>{node.name}</text>
+    getNodeTransform = (node) => 'translate(' + node.x + ',' + node.y + ')'
 
     render() {
-        // Manually forcing react to render whenever force sim ticks, so we recreate nodes/edges
-        // here on each re-render
-        // TODO
-        //  maybe bad performance wise now that 'hovered_node' is tracked in Graph state,
-        //  but so far haven't seen any noticeable slow down
-        let nodes = this.nodes.map((node) =>
-                    <Node node={node} hovered_node={this.state.hovered_node}
-                          expand={() => this.expandNode(node)} setHovered={this.setHoveredNode}
-                          getRadius={() => this.getRadius(node.popularity)}/>
-                          );
+        // Manually forcing react to render whenever D3 force sim ticks, so we recreate nodes/edges
+        // on each re-render with the node/edge data being modified by D3 force sim.
 
         let edges = this.edges.map((edge) => {
             return (
                 <Edge edge={edge} hovered_node={this.state.hovered_node}/>
             );
         });
+        // SVG uses 'painter' pattern for deciding element z-index priority - since priority changes
+        // dynamically on hovering, I found easiest & cleanest solution was to draw base circles and
+        // labels then redraw on top of those to highlight when necessary.
+        let node_bed = this.nodes.map((node) =>
+                    <circle transform={this.getNodeTransform(node)}
+                            className={'node'}
+                            r={this.getRadius(node.popularity)}></circle>);
 
-        let hovered_label;
-        let labels = this.nodes.map((node) => {
-            let text = <text textAnchor={"middle"} y={node.y + this.getRadius(node.popularity) + 7} x={node.x}
-                             dy='.45em'>{node.name}</text>
+        let label_bed = this.nodes.map((node) => this.getLabelText(node));
 
-            if(this.state.hovered_node === node.id) {
-                return <g id={node.id}>
-                    {React.cloneElement(text, {className: "hovered_underlay"})}
-                    {React.cloneElement(text)}
-                </g>
-            }
-            else {
-                return text
-            }
-        });
+        let nodes = this.nodes.map((node) =>
+            <Node node={node} hovered_node={this.state.hovered_node}
+                  expand={() => this.expandNode(node)} setHovered={this.setHoveredNode}
+                  getRadius={() => this.getRadius(node.popularity)}
+                  getNodeTransform={() => this.getNodeTransform(node)}/>
+        );
+
+        let foreground_labels = []
+        if (this.state.hovered_node) {
+            foreground_labels = this.nodes.map((node) => {
+                if(this.state.hovered_node === node.id ||
+                   node.sources.includes(this.state.hovered_node) ||
+                   (node.targets && node.targets.includes(this.state.hovered_node))) {
+                    return <Label node={node} hovered_node={this.state.hovered_node}
+                           getLabelText={() => this.getLabelText(node)}/>
+                }
+            })
+        }
 
         return (
             <svg className='graph' width={width} height={height} overflow={"auto"}>
                 <g>
-                    {edges}
-                    {nodes}
-                    {labels}
+                    <g id={"edges"}>
+                        {edges}
+                    </g>
+                    <g id={"base_nodes"}>
+                        {node_bed}
+                    </g>
+                    <g id={"base_labels"}>
+                        {label_bed}
+                    </g>
+                    <g id={"nodes"}>
+                        {nodes}
+                    </g>
+                    {foreground_labels}
                     {this.state.hovered_node &&
                     <g>
-                        <use xlinkHref={`#${this.state.hovered_node}`}></use>
+                        <use xlinkHref={`#${this.state.hovered_node}-label`}></use>
                     </g>
                     }
                 </g>
