@@ -57,6 +57,8 @@ export default class Graph extends React.Component {
 
     componentDidUpdate(prevProps) {
         if(this.props.initial_artist !== prevProps.initial_artist){
+            console.log(prevProps.initial_artist)
+            console.log(this.props.initial_artist)
             this.initializeNewGraph()
         }
     }

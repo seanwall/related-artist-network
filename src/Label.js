@@ -20,7 +20,6 @@ export default class Label extends React.Component {
 
     render () {
         let class_name = this.getClassName()
-        console.log(class_name)
         let text = this.props.getLabelText()
         return (
             <g id={`${this.props.node.id}-label`}>

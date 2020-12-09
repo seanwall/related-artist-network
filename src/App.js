@@ -80,25 +80,25 @@ class App extends React.Component {
                 }
                 {
                     this.state.initial_artist &&
-                    <div>
+                    <div className='h-25 d-inline-block'>
                         <div className='svg-key m-1 p-2'>
                             <p className='m-0'><b>Left-click</b> on an artist node to explore</p>
                             <p className='m-0'><b>Hover</b> over an artist node to listen to an audio sample</p>
-                            <row>
-                                <input className='ml-2 col-8 p-1'
+                            <div className='input-group input-group-sm'>
+                                <input className='form-control'
                                     onChange={(event) => this.setState({
                                         searchQuery: event.target.value
                                     })}
                                     value={this.state.searchQuery}
                                     placeholder="Artist name..."/>
-                                <button className='ml-2 col-3'
+                                <button className='ml-2 mr-1 col-3'
                                     onClick={
                                         () => {
                                             this.setInitialArtist(this.state.searchQuery);
                                         }}>
                                     Go
                                 </button>
-                            </row>
+                            </div>
                         </div>
                         <Graph initial_artist={this.state.initial_artist}/>
                     </div>

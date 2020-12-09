@@ -14,6 +14,16 @@ export default class Node extends React.Component {
     }
 
     componentDidMount() {
+        this.initializePreview()
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.node !== prevProps.node) {
+            this.initializePreview()
+        }
+    }
+
+    initializePreview = () => {
         // Track URL is populated asynchronously in Graph.js so that rendering can take place without
         // waiting for spotify requests, need to wait for track url promise to resolve before creating
         // preview audio object
