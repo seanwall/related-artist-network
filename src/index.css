@@ -16,4 +16,10 @@ code {
     monospace;
 }
 
+:root {
+  --child-color: steelblue;
+  --parent-color: slateblue;
+  --active-color: cadetblue;
+}
+
 @import "~bootstrap/dist/css/bootstrap.min.css";

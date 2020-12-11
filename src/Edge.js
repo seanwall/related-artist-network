@@ -8,10 +8,10 @@ export default class Edge extends React.Component {
 
     getClassName() {
         if(this.props.hovered_node_id === this.props.edge.source.id) {
-            return 'edge-child'
+            return 'child-edge'
         }
         else if(this.props.hovered_node_id === this.props.edge.target.id){
-            return 'edge-parent'
+            return 'parent-edge'
         }
         else {
             return 'edge'

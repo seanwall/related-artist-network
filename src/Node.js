@@ -74,13 +74,13 @@ export default class Node extends React.Component {
 
     getClassName() {
         if(this.state.mouseOver) {
-            return 'node-active'
+            return 'active-node'
         }
         else if(this.props.node.sources && this.props.node.sources.includes(this.props.hovered_node_id)) {
-            return 'node-child'
+            return 'child-node'
         }
         else if(this.props.node.targets && this.props.node.targets.includes(this.props.hovered_node_id)){
-            return 'node-parent'
+            return 'parent-node'
         }
         else {
             return 'hidden-node'

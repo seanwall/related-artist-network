@@ -4,16 +4,16 @@
 }
 
 .active-label{
-    stroke: cadetblue;
+    stroke: var(--active-color);
     stroke-width: .3em;
 }
 
 .parent-label{
-    stroke: slateblue;
+    stroke: var(--parent-color);
     stroke-width: .3em;
 }
 
 .child-label{
-    stroke: steelblue;
+    stroke: var(--child-color);
     stroke-width: .3em;
 }

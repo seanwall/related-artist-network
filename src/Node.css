@@ -6,16 +6,16 @@
     opacity: 0
 }
 
-.node-active{
-    fill:cadetblue;
+.active-node{
+    fill:var(--active-color);
     cursor: pointer;
     position: relative;
 }
 
-.node-parent{
-    fill:slateblue;
+.parent-node{
+    fill:var(--parent-color);
 }
 
-.node-child{
-    fill:steelblue;
+.child-node{
+    fill:var(--child-color);
 }

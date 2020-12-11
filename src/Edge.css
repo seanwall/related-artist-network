@@ -3,16 +3,16 @@
     stroke-width: .5;
 }
 
-.edge-active{
-    stroke:cadetblue;
+.active-edge{
+    stroke:var(--active-color);
 }
 
-.edge-parent{
-    stroke:slateblue;
+.parent-edge{
+    stroke:var(--parent-color);
     stroke-width: 2;
 }
 
-.edge-child{
-    stroke:steelblue;
+.child-edge{
+    stroke:var(--child-color);
     stroke-width: 1;
 }
