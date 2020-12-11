@@ -76,10 +76,10 @@ export default class Node extends React.Component {
         if(this.state.mouseOver) {
             return 'node-active'
         }
-        else if(this.props.node.sources && this.props.node.sources.includes(this.props.hovered_node)) {
+        else if(this.props.node.sources && this.props.node.sources.includes(this.props.hovered_node_id)) {
             return 'node-child'
         }
-        else if(this.props.node.targets && this.props.node.targets.includes(this.props.hovered_node)){
+        else if(this.props.node.targets && this.props.node.targets.includes(this.props.hovered_node_id)){
             return 'node-parent'
         }
         else {
@@ -91,8 +91,8 @@ export default class Node extends React.Component {
         const transform = this.props.getNodeTransform();
         const className = this.getClassName()
         const radius = this.props.getRadius()
-        const previewTextX = window.pageXOffset + window.innerWidth - 20
-        const previewTextY = window.pageYOffset + 20
+        const x_preview_text = window.pageXOffset + window.innerWidth - 20
+        const y_preview_text = window.pageYOffset + 20
 
         return (
             <g className={className} id={this.props.node.id} key={this.props.node.id}
@@ -102,10 +102,10 @@ export default class Node extends React.Component {
                 {
                     this.state.mouseOver &&
                     <text textAnchor={"end"}>
-                        <tspan y={previewTextY} x={previewTextX}>{this.props.node.name} - {this.previewTitle}</tspan>
+                        <tspan y={y_preview_text} x={x_preview_text}>{this.props.node.name} - {this.previewTitle}</tspan>
                         {
                             !this.previewAudio &&
-                            <tspan fill="red" y={previewTextY + 17} x={previewTextX}>No preview track available</tspan>
+                            <tspan fill="red" y={y_preview_text + 17} x={x_preview_text}>No preview track available</tspan>
                         }
                     </text>
                 }

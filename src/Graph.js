@@ -38,7 +38,7 @@ export default class Graph extends React.Component {
     }
 
     state = {
-        hovered_node: null
+        hovered_node_id: null
     }
 
     // Storing nodes and edges outside of state as we'll be managing rendering manually
@@ -194,7 +194,7 @@ export default class Graph extends React.Component {
 
     setHoveredNode = (node_id) => {
         this.setState({
-            hovered_node: node_id
+            hovered_node_id: node_id
         })
     }
 
@@ -209,7 +209,7 @@ export default class Graph extends React.Component {
 
         let edges = this.edges.map((edge) => {
             return (
-                <Edge edge={edge} hovered_node={this.state.hovered_node}/>
+                <Edge edge={edge} hovered_node_id={this.state.hovered_node_id}/>
             );
         });
         // SVG uses 'painter' pattern for deciding element z-index priority - since priority changes
@@ -223,19 +223,19 @@ export default class Graph extends React.Component {
         let label_bed = this.nodes.map((node) => this.getLabelText(node));
 
         let nodes = this.nodes.map((node) =>
-            <Node node={node} hovered_node={this.state.hovered_node}
+            <Node node={node} hovered_node_id={this.state.hovered_node_id}
                   expand={() => this.expandNode(node)} setHovered={this.setHoveredNode}
                   getRadius={() => this.getRadius(node.popularity)}
                   getNodeTransform={() => this.getNodeTransform(node)}/>
         );
 
         let foreground_labels = []
-        if (this.state.hovered_node) {
+        if (this.state.hovered_node_id) {
             foreground_labels = this.nodes.map((node) => {
-                if(this.state.hovered_node === node.id ||
-                   node.sources.includes(this.state.hovered_node) ||
-                   (node.targets && node.targets.includes(this.state.hovered_node))) {
-                    return <Label node={node} hovered_node={this.state.hovered_node}
+                if(this.state.hovered_node_id === node.id ||
+                   node.sources.includes(this.state.hovered_node_id) ||
+                   (node.targets && node.targets.includes(this.state.hovered_node_id))) {
+                    return <Label node={node} hovered_node_id={this.state.hovered_node_id}
                            getLabelText={() => this.getLabelText(node)}/>
                 }
             })
@@ -257,9 +257,9 @@ export default class Graph extends React.Component {
                         {nodes}
                     </g>
                     {foreground_labels}
-                    {this.state.hovered_node &&
+                    {this.state.hovered_node_id &&
                     <g>
-                        <use xlinkHref={`#${this.state.hovered_node}-label`}></use>
+                        <use xlinkHref={`#${this.state.hovered_node_id}-label`}></use>
                     </g>
                     }
                 </g>

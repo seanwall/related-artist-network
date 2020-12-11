@@ -48,6 +48,23 @@ class App extends React.Component {
   }
 
   render() {
+        let searchGroup =
+            <div className='input-group input-group-sm'>
+                <input className='form-control'
+                       onChange={(event) => this.setState({
+                           search_query: event.target.value
+                       })}
+                       value={this.state.search_query}
+                       placeholder="Artist name..."/>
+                <button className='ml-2 mr-1 col-3'
+                        onClick={
+                            () => {
+                                this.setInitialArtist(this.state.search_query);
+                            }}>
+                    Go
+                </button>
+            </div>
+
         return(
             <div className="container-fluid h-100 p-0">
                 {
@@ -61,19 +78,22 @@ class App extends React.Component {
                                 </p>
                                 <div className="row">
                                     <div className="col-1"></div>
-                                    <input className="col-8 mr-1 p-1"
-                                        onChange={(event) => this.setState({
-                                        search_query: event.target.value
-                                    })}
-                                           value={this.state.search_query}
-                                           placeholder="Artist name..."/>
-                                    <button className="col-2"
-                                        onClick={
-                                            () => {
-                                                this.setInitialArtist(this.state.search_query);
-                                            }}>
-                                        Go
-                                    </button>
+                                    <div className="col-10">
+                                        {searchGroup}
+                                    </div>
+                                    {/*<input className="col-8 mr-1 p-1"*/}
+                                    {/*    onChange={(event) => this.setState({*/}
+                                    {/*    search_query: event.target.value*/}
+                                    {/*})}*/}
+                                    {/*       value={this.state.search_query}*/}
+                                    {/*       placeholder="Artist name..."/>*/}
+                                    {/*<button className="col-2"*/}
+                                    {/*    onClick={*/}
+                                    {/*        () => {*/}
+                                    {/*            this.setInitialArtist(this.state.search_query);*/}
+                                    {/*        }}>*/}
+                                    {/*    Go*/}
+                                    {/*</button>*/}
                                 </div>
                             </div>
                         </div>
@@ -85,21 +105,7 @@ class App extends React.Component {
                         <div className='svg-key m-1 p-2'>
                             <p className='m-0'><b>Left-click</b> on an artist node to explore</p>
                             <p className='m-0'><b>Hover</b> over an artist node to listen to an audio sample</p>
-                            <div className='input-group input-group-sm'>
-                                <input className='form-control'
-                                    onChange={(event) => this.setState({
-                                        search_query: event.target.value
-                                    })}
-                                    value={this.state.search_query}
-                                    placeholder="Artist name..."/>
-                                <button className='ml-2 mr-1 col-3'
-                                    onClick={
-                                        () => {
-                                            this.setInitialArtist(this.state.search_query);
-                                        }}>
-                                    Go
-                                </button>
-                            </div>
+                            {searchGroup}
                         </div>
                         <Graph initial_artist={this.state.initial_artist}/>
                     </div>

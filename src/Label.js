@@ -7,13 +7,13 @@ export default class Label extends React.Component {
     }
 
     getClassName() {
-        if(this.props.node.id === this.props.hovered_node) {
+        if(this.props.node.id === this.props.hovered_node_id) {
             return 'active-label'
         }
-        if(this.props.node.sources && this.props.node.sources.includes(this.props.hovered_node)) {
+        if(this.props.node.sources && this.props.node.sources.includes(this.props.hovered_node_id)) {
             return 'child-label'
         }
-        else if(this.props.node.targets && this.props.node.targets.includes(this.props.hovered_node)){
+        else if(this.props.node.targets && this.props.node.targets.includes(this.props.hovered_node_id)){
             return 'parent-label'
         }
     }
