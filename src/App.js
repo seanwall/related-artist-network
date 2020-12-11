@@ -101,11 +101,13 @@ class App extends React.Component {
                 }
                 {
                     this.state.initial_artist &&
-                    <div className='h-25 d-inline-block'>
-                        <div className='svg-key m-1 p-2'>
-                            <p className='m-0'><b>Left-click</b> on an artist node to explore</p>
-                            <p className='m-0'><b>Hover</b> over an artist node to listen to an audio sample</p>
-                            {searchGroup}
+                    <div>
+                        <div className='h-25 d-inline-block'>
+                            <div className='svg-key m-1 p-2'>
+                                <p className='m-0'><b>Left-click</b> on an artist node to explore</p>
+                                <p className='m-0'><b>Hover</b> over an artist node to listen to an audio sample</p>
+                                {searchGroup}
+                            </div>
                         </div>
                         <Graph initial_artist={this.state.initial_artist}/>
                     </div>
