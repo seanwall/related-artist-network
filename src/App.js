@@ -24,19 +24,13 @@ class App extends React.Component {
 
   //Given a search query, retrieves artists from spotify and creates an initial node for the graph
   setInitialArtist = (search_query) => {
-    if(!search_query) {
-        //TODO ERROR ALERT
-        console.log('null or empty search query')
-    }
-    else{
+    if(search_query) {
         this.searchArtists(search_query).then(artist_arr => {
             this.setState({search_query: ''})
             if (artist_arr.length === 0) {
-                //TODO ERROR ALERT
                 console.log('No artists found search again')
             }
             else {
-                //TODO CURRENTLY TAKING FIRST ARTIST, GIVE OPTIONS?
                 const artist_obj = artist_arr[0]
                 let track_promise = this.getTrackForArtist(artist_obj.id).then(track => track)
                 this.setState({
@@ -104,8 +98,9 @@ class App extends React.Component {
                     <div>
                         <div className='h-25 d-inline-block'>
                             <div className='svg-key m-1 p-2'>
-                                <p className='m-0'><b>Left-click</b> on an artist node to explore</p>
-                                <p className='m-0'><b>Hover</b> over an artist node to listen to an audio sample</p>
+                                <p className='m-0'><b>Left-click</b> on a node to explore</p>
+                                <p className='m-0'><b>Right-click</b> on a node to see an artist on Spotify</p>
+                                <p className='m-0'><b>Hover</b> over a node to hear a sample</p>
                                 {searchGroup}
                             </div>
                         </div>
