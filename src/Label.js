@@ -24,7 +24,7 @@ export default class Label extends React.Component {
         return (
             <g id={`${this.props.node.id}-label`}>
                 {React.cloneElement(text, {className: class_name})}
-                {React.cloneElement(text, {className: 'label-underlay'})}
+                {React.cloneElement(text, {className: 'label-fill'})}
             </g>
         )}
 }

@@ -99,6 +99,7 @@ export default class Node extends React.Component {
         const radius = this.props.getRadius()
         const x_preview_text = window.pageXOffset + window.innerWidth - 20
         const y_preview_text = window.pageYOffset
+        const preview_text = <tspan className='preview-text' y={y_preview_text} x={x_preview_text}>{this.props.node.name} - {this.track_title}</tspan>
 
         return (
             <g className={className} id={this.props.node.id} key={this.props.node.id}
@@ -109,10 +110,11 @@ export default class Node extends React.Component {
                 {
                     this.state.mouse_over &&
                     <text textAnchor={"end"}>
-                        <tspan y={y_preview_text} x={x_preview_text}>{this.props.node.name} - {this.track_title}</tspan>
+                        {React.cloneElement(preview_text, {className: 'preview-underlay'})}
+                        {React.cloneElement(preview_text, {className: 'preview-fill'})}
                         {
                             !this.preview_audio &&
-                            <tspan fill="red" y={y_preview_text + 17} x={x_preview_text}>No preview track available</tspan>
+                            <tspan fill="red" y={y_preview_text + 20} x={x_preview_text}>No audio sample available</tspan>
                         }
                     </text>
                 }

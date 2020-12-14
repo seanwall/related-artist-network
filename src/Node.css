@@ -6,6 +6,17 @@
     opacity: 0
 }
 
+.preview-fill{
+    stroke: white;
+    fill: white!important;
+    stroke-width: .1em;
+}
+
+.preview-underlay{
+    stroke: var(--active-color);
+    stroke-width: .3em
+}
+
 .active-node{
     fill:var(--active-color);
     cursor: pointer;
