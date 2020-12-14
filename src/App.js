@@ -43,7 +43,11 @@ class App extends React.Component {
 
   render() {
         let searchGroup =
-            <div className='input-group input-group-sm'>
+            <form className='input-group input-group-sm'
+                  onSubmit={(e) => {
+                      e.preventDefault();
+                      this.setInitialArtist(this.state.search_query);
+                  }}>
                 <input className='form-control'
                        onChange={(event) => this.setState({
                            search_query: event.target.value
@@ -51,13 +55,10 @@ class App extends React.Component {
                        value={this.state.search_query}
                        placeholder="Artist name..."/>
                 <button className='ml-2 mr-1 col-3'
-                        onClick={
-                            () => {
-                                this.setInitialArtist(this.state.search_query);
-                            }}>
+                        type='submit'>
                     Go
                 </button>
-            </div>
+            </form>
 
         return(
             <div className="container-fluid h-100 p-0">
