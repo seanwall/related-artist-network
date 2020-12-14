@@ -3,6 +3,10 @@
     stroke-width: .5;
 }
 
+.hidden-edge{
+    opacity:0;
+}
+
 .active-edge{
     stroke:var(--active-color);
 }

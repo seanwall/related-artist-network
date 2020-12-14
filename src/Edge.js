@@ -14,7 +14,7 @@ export default class Edge extends React.Component {
             return 'parent-edge'
         }
         else {
-            return 'edge'
+            return 'hidden-edge'
         }
     }
 

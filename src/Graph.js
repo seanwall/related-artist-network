@@ -5,6 +5,7 @@ import Node from './Node.js';
 import Edge from './Edge.js';
 import Label from './Label.js';
 import './Graph.css'
+import './Edge.css'
 
 const width = 2000;
 const height = 2000;
@@ -207,20 +208,25 @@ export default class Graph extends React.Component {
         // Manually forcing react to render whenever D3 force sim ticks, so we recreate nodes/edges
         // on each re-render with the node/edge data being modified by D3 force sim.
 
-        let edges = this.edges.map((edge) => {
-            return (
-                <Edge edge={edge} hovered_node_id={this.state.hovered_node_id}/>
-            );
-        });
         // SVG uses 'painter' pattern for deciding element z-index priority - since priority changes
         // dynamically on hovering, I found easiest & cleanest solution was to draw base circles and
         // labels then redraw on top of those to highlight when necessary.
+        let edge_bed = this.edges.map((edge) => {
+            return (<line className='edge' key={edge.id}
+                          x1={edge.source.x} x2={edge.target.x} y1={edge.source.y} y2={edge.target.y} />)
+        })
         let node_bed = this.nodes.map((node) =>
                     <circle className={'node'}
                             r={this.getRadius(node.popularity)}
                             transform={this.getNodeTransform(node)}></circle>);
 
         let label_bed = this.nodes.map((node) => this.getLabelText(node));
+
+        let edges = this.edges.map((edge) => {
+            return (
+                <Edge edge={edge} hovered_node_id={this.state.hovered_node_id}/>
+            );
+        });
 
         let nodes = this.nodes.map((node) =>
             <Node node={node} hovered_node_id={this.state.hovered_node_id}
@@ -244,14 +250,17 @@ export default class Graph extends React.Component {
         return (
             <svg className='graph' width={width} height={height} overflow={"auto"}>
                 <g>
-                    <g id={"edges"}>
-                        {edges}
+                    <g id={"base_edges"}>
+                        {edge_bed}
                     </g>
                     <g id={"base_nodes"}>
                         {node_bed}
                     </g>
                     <g id={"base_labels"}>
                         {label_bed}
+                    </g>
+                    <g id={"edges"}>
+                        {edges}
                     </g>
                     <g id={"nodes"}>
                         {nodes}

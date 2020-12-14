@@ -10,11 +10,13 @@
     stroke: white;
     fill: white!important;
     stroke-width: .1em;
+    font-size: 18px;
 }
 
 .preview-underlay{
     stroke: var(--active-color);
-    stroke-width: .3em
+    stroke-width: .3em;
+    font-size: 18px;
 }
 
 .active-node{
