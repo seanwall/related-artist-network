@@ -277,6 +277,7 @@ export default class Graph extends React.Component {
                     {this.state.hovered_node_id &&
                     <g>
                         <use xlinkHref={`#${this.state.hovered_node_id}-label`}></use>
+                        <use xlinkHref={`#${this.state.hovered_node_id}-preview`}></use>
                     </g>
                     }
                 </g>

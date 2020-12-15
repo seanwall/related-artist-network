@@ -87,7 +87,7 @@ class App extends React.Component {
                         <div className='h-25'>
                             <div className='svg-key m-1 p-2'>
                                 <p className='m-0'><b>Click</b> on a node to explore</p>
-                                <p className='m-0'><b>Click</b> on an artist name to see them on Spotify</p>
+                                <p className='m-0'><b>Click</b> on an artist name to open their Spotify page</p>
                                 <p className='m-0'><b>Hover</b> over a node to hear a sample</p>
                                 {searchGroup}
                             </div>

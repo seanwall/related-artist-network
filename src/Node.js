@@ -102,7 +102,7 @@ export default class Node extends React.Component {
                 onMouseOver={() => this.handleMouseHover('over')}>
                 {
                     this.state.mouse_over &&
-                    <text textAnchor={"end"}>
+                    <text id={`${this.props.node.id}-preview`} textAnchor={"end"}>
                         {React.cloneElement(preview_text, {className: 'preview-underlay'})}
                         {React.cloneElement(preview_text, {className: 'preview-fill'})}
                         {
