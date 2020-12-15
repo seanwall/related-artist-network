@@ -17,3 +17,12 @@
     stroke: var(--child-color);
     stroke-width: .3em;
 }
+
+.hidden-label {
+    opacity: 0;
+}
+
+.hidden-label:hover {
+    opacity: 1;
+    text-decoration: underline;
+}

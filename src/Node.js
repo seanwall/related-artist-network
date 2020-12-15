@@ -8,7 +8,6 @@ export default class Node extends React.Component {
 
     preview_audio;
     track_title = ""
-    track_url = ""
 
     constructor(props) {
         super(props)
@@ -35,7 +34,6 @@ export default class Node extends React.Component {
             if (track) {
                 if (track.preview_url) this.preview_audio = new Audio(track.preview_url)
                 this.track_title = track.name
-                this.track_url = track.external_urls.spotify
             }
 
         })
@@ -74,10 +72,6 @@ export default class Node extends React.Component {
         }
     }
 
-    trackRedirect() {
-        window.open(this.track_url)
-    }
-
     getClassName() {
         if(this.state.mouse_over) {
             return 'active-node'
@@ -98,13 +92,12 @@ export default class Node extends React.Component {
         const className = this.getClassName()
         const radius = this.props.getRadius()
         const x_preview_text = window.pageXOffset + window.innerWidth - 20
-        const y_preview_text = window.pageYOffset
+        const y_preview_text = window.pageYOffset + 25
         const preview_text = <tspan className='preview-text' y={y_preview_text} x={x_preview_text}>{this.props.node.name} - {this.track_title}</tspan>
 
         return (
             <g className={className} id={this.props.node.id} key={this.props.node.id}
                 onClick={() => this.props.expand()}
-                onContextMenu={() => this.trackRedirect()}
                 onMouseLeave={() => this.handleMouseHover('leave')}
                 onMouseOver={() => this.handleMouseHover('over')}>
                 {

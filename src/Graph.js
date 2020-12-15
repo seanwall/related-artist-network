@@ -235,13 +235,18 @@ export default class Graph extends React.Component {
                   getNodeTransform={() => this.getNodeTransform(node)}/>
         );
 
+        let labels = this.nodes.map((node) =>
+            <Label node={node} hovered_node_id={this.state.hovered_node_id}
+                   getLabelText={() => this.getLabelText(node)}/>
+        )
+
         let foreground_labels = []
         if (this.state.hovered_node_id) {
             foreground_labels = this.nodes.map((node) => {
                 if(this.state.hovered_node_id === node.id ||
                    node.sources.includes(this.state.hovered_node_id) ||
                    (node.targets && node.targets.includes(this.state.hovered_node_id))) {
-                    return <Label node={node} hovered_node_id={this.state.hovered_node_id}
+                return <Label node={node} hovered_node_id={this.state.hovered_node_id}
                            getLabelText={() => this.getLabelText(node)}/>
                 }
             })
@@ -261,6 +266,9 @@ export default class Graph extends React.Component {
                     </g>
                     <g id={"edges"}>
                         {edges}
+                    </g>
+                    <g id={"labels"}>
+                        {labels}
                     </g>
                     <g id={"nodes"}>
                         {nodes}
