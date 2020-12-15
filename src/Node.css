@@ -1,5 +1,7 @@
 .node{
     fill: lightslategrey;
+    stroke: aliceblue;
+    stroke-width: .15em;
 }
 
 .hidden-node{

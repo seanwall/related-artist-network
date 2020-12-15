@@ -5,6 +5,7 @@ import Node from './Node.js';
 import Edge from './Edge.js';
 import Label from './Label.js';
 import './Graph.css'
+import './Node.css'
 import './Edge.css'
 
 const width = 2000;

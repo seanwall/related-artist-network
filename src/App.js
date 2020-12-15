@@ -69,7 +69,8 @@ class App extends React.Component {
                         <div className="col-8">
                             <div className="home-group">
                                 <p className="text-center">
-                                    Enter an artist name to start a graph. Pellentesque turpis dui, pellentesque nec dapibus eu, semper ut purus. Pellentesque tristique mattis ultricies.
+                                    This is an interactive music exploration tool built using related artist data from Spotify's Web API.
+                                    Enter an artist name to start a graph.
                                 </p>
                                 <div className="row">
                                     <div className="col-1"></div>
@@ -87,7 +88,7 @@ class App extends React.Component {
                         <div className='h-25'>
                             <div className='svg-key m-1 p-2'>
                                 <p className='m-0'><b>Click</b> on a node to explore</p>
-                                <p className='m-0'><b>Click</b> on an artist name to open their Spotify page</p>
+                                <p className='m-0'><b>Click</b> on an artist's name to open their Spotify page</p>
                                 <p className='m-0'><b>Hover</b> over a node to hear a sample</p>
                                 {searchGroup}
                             </div>
