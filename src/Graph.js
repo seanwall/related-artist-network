@@ -75,6 +75,7 @@ export default class Graph extends React.Component {
             popularity: this.props.initial_artist.popularity,
             x: 0,
             y: 0,
+            tier: 0,
             track_promise: this.props.initial_artist.track_promise
         }
         //Initializing nodes & edges - or resetting them if new Graph is being created
@@ -128,9 +129,15 @@ export default class Graph extends React.Component {
         //  if(this.firstSim) {
         //      this.firstSim = false
             // Fix nodes and remove centering force once a new node is expanded
-            this.nodes.map((node) => {
-                node.fx = node.x
-                node.fy = node.y
+            this.nodes.map((n) => {
+                if(n.id != node.id) {
+                    n.fx = n.x
+                    n.fy = n.y
+                }
+                else {
+                    n.fx = null
+                    n.fy = null
+                }
             })
             //      return {
             //          ...node,
@@ -176,6 +183,7 @@ export default class Graph extends React.Component {
                         popularity:artist.popularity,
                         x: 0,
                         y:0,
+                        tier: expanded_node.tier + 1,
                         track_promise: track_promise
                     }
                     new_nodes.push(artist_node)
