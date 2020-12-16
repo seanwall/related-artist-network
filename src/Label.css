@@ -24,8 +24,7 @@
 
 .hidden-label {
     opacity: 0;
-    stroke: var(--node-color);
-    fill: var(--node-color);
+    fill: black;
 }
 
 .hidden-label:hover {
