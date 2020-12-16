@@ -8,8 +8,8 @@ import './Graph.css'
 import './Node.css'
 import './Edge.css'
 
-const width = 2000;
-const height = 2000;
+const width = window.innerWidth;
+const height = window.innerHeight;
 
 // Node object structure:
 /*
@@ -40,7 +40,26 @@ export default class Graph extends React.Component {
     }
 
     state = {
-        hovered_node_id: null
+        hovered_node_id: null,
+        dragging: false,
+        view_pos: {
+            x: 0,
+            y: 0
+        },
+        /*
+         Position information used for dragging logic
+         drag: {
+            rel_pos: {
+                x: Number,
+                y: Number
+            }
+            init_pos: {
+                x: Number,
+                y: Number
+            }
+         }
+         */
+        drag: null
     }
 
     // Storing nodes and edges outside of state as we'll be managing rendering manually
@@ -50,8 +69,6 @@ export default class Graph extends React.Component {
     edges = [];
 
     force = null;
-
-    firstSim = true;
 
     componentDidMount() {
         this.initializeNewGraph()
@@ -65,8 +82,13 @@ export default class Graph extends React.Component {
 
     //Creates initial node from prop passed from App.js,
     initializeNewGraph = () => {
-        // Center visualization when initialized, accounting for window size
-        window.scrollTo(width/2 - (window.innerWidth/2), height/2 - (window.innerHeight/2))
+        // Center visualization when initialized
+        this.setState({
+            view_pos: {
+                x: 0,
+                y: 0
+            }
+        })
 
         const initial_node = {
             id: this.props.initial_artist.id,
@@ -75,7 +97,6 @@ export default class Graph extends React.Component {
             popularity: this.props.initial_artist.popularity,
             x: 0,
             y: 0,
-            tier: 0,
             track_promise: this.props.initial_artist.track_promise
         }
         //Initializing nodes & edges - or resetting them if new Graph is being created
@@ -108,45 +129,23 @@ export default class Graph extends React.Component {
         this.force.on('tick', () => {
             this.forceUpdate()
         });
-
-        //  this.force.on('end', () => {
-        //      // Fix nodes once simulation ends
-        //      this.nodes = this.nodes.map((node) => {
-        //          return {
-        //              ...node,
-        //              'fx': node.x,
-        //              'fy': node.y
-        //          }
-        //      })
-        //      // Remove centering force once simulation ends (only really matters for first simulation)
-        //      this.force.force("center", null)
-        //      console.log(this.nodes)
-        //  })
     }
 
     // Expands the graph with given node's related artists and triggers the force simulation
     expandNode(node) {
-        //  if(this.firstSim) {
-        //      this.firstSim = false
-            // Fix nodes and remove centering force once a new node is expanded
-            this.nodes.map((n) => {
-                if(n.id != node.id) {
-                    n.fx = n.x
-                    n.fy = n.y
-                }
-                else {
-                    n.fx = null
-                    n.fy = null
-                }
-            })
-            //      return {
-            //          ...node,
-            //          'fx': node.x,
-            //          'fy': node.y
-            //      }
-            //  })
-            this.force.force("center", null)
-        // }
+        // Fix nodes and remove centering force once a new node is expanded
+        this.nodes.map((n) => {
+            if(n.id != node.id) {
+                n.fx = n.x
+                n.fy = n.y
+            }
+            else {
+                n.fx = null
+                n.fy = null
+            }
+        })
+        this.force.force("center", null)
+
         this.expandGraph(node).then(response => {
             // Update force simulation with new set of nodes & edges and restart simulation
             this.force.nodes(this.nodes)
@@ -160,7 +159,7 @@ export default class Graph extends React.Component {
         return this.getRelatedArtists(expanded_node.id).then((related_artists) => {
             let new_nodes = []
             let new_edges = []
-            // Keeping track of artists related to expanded node to pass to node object - used
+            // Keeping track of artists related to expanded node to pass to expanded node object - used
             // to know which nodes to highlight when a node is hovered
             let targets = []
 
@@ -183,7 +182,6 @@ export default class Graph extends React.Component {
                         popularity:artist.popularity,
                         x: 0,
                         y:0,
-                        tier: expanded_node.tier + 1,
                         track_promise: track_promise
                     }
                     new_nodes.push(artist_node)
@@ -206,6 +204,48 @@ export default class Graph extends React.Component {
         this.setState({
             hovered_node_id: node_id
         })
+    }
+
+    startDrag = (e) => {
+        // Starting a drag only on left mouse button click
+        if (e.button === 0) {
+            let x_curr = window.pageXOffset;
+            let y_curr = window.pageYOffset;
+            this.setState({
+                dragging: true,
+                drag: {
+                    rel_pos: {
+                        x: e.screenX - x_curr,
+                        y: e.screenY - y_curr
+                    },
+                    init_pos: {
+                        x: this.state.view_pos.x,
+                        y: this.state.view_pos.y
+                    }
+                }
+            })
+            e.stopPropagation()
+            e.preventDefault()
+        }
+    }
+
+    stopDrag = (e) => {
+        this.setState({dragging: false})
+        e.stopPropagation()
+        e.preventDefault()
+    }
+
+    drag = (e) => {
+        if (this.state.dragging) {
+            this.setState({
+                view_pos: {
+                    x: this.state.drag.init_pos.x + (this.state.drag.rel_pos.x - e.screenX),
+                    y: this.state.drag.init_pos.y + (this.state.drag.rel_pos.y - e.screenY)
+                }
+            })
+            e.stopPropagation()
+            e.preventDefault()
+        }
     }
 
     // Rendering calculations for nodes used for base nodes in Graph render and in Node component rendering
@@ -241,7 +281,8 @@ export default class Graph extends React.Component {
             <Node node={node} hovered_node_id={this.state.hovered_node_id}
                   expand={() => this.expandNode(node)} setHovered={this.setHoveredNode}
                   getRadius={() => this.getRadius(node.popularity)}
-                  getNodeTransform={() => this.getNodeTransform(node)}/>
+                  getNodeTransform={() => this.getNodeTransform(node)}
+                  view_pos={this.state.view_pos}/>
         );
 
         let labels = this.nodes.map((node) =>
@@ -262,7 +303,14 @@ export default class Graph extends React.Component {
         }
 
         return (
-            <svg className='graph' width={width} height={height} overflow={"auto"}>
+            <svg className='graph'
+                 width={width}
+                 height={height}
+                 viewBox={`${this.state.view_pos.x} ${this.state.view_pos.y} ${width} ${height}`}
+                 overflow={"auto"}
+                 onMouseDown={(e) => this.startDrag(e)}
+                 onMouseMove={(e) => this.drag(e)}
+                 onMouseUp={(e) => this.stopDrag(e)}>
                 <g>
                     <g id={"base_edges"}>
                         {edge_bed}

@@ -49,8 +49,8 @@ export default class Label extends React.Component {
 
     isHighlighted() {
         return (this.props.node.id === this.props.hovered_node_id ||
-           this.props.node.sources && this.props.node.sources.includes(this.props.hovered_node_id) ||
-           this.props.node.targets && this.props.node.targets.includes(this.props.hovered_node_id))
+            (this.props.node.sources && this.props.node.sources.includes(this.props.hovered_node_id)) ||
+            (this.props.node.targets && this.props.node.targets.includes(this.props.hovered_node_id)))
     }
 
     render () {

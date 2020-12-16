@@ -91,8 +91,8 @@ export default class Node extends React.Component {
         const transform = this.props.getNodeTransform();
         const className = this.getClassName()
         const radius = this.props.getRadius()
-        const x_preview_text = window.pageXOffset + window.innerWidth - 20
-        const y_preview_text = window.pageYOffset + 25
+        const x_preview_text = this.props.view_pos.x + window.innerWidth - 20
+        const y_preview_text = this.props.view_pos.y + 25
         const preview_text = <tspan className='preview-text' y={y_preview_text} x={x_preview_text}>{this.props.node.name} - {this.track_title}</tspan>
 
         return (
