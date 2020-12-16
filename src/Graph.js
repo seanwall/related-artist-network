@@ -5,6 +5,7 @@ import Node from './Node.js';
 import Edge from './Edge.js';
 import Label from './Label.js';
 import './Graph.css'
+import './Label.css'
 import './Node.css'
 import './Edge.css'
 
@@ -250,7 +251,7 @@ export default class Graph extends React.Component {
 
     // Rendering calculations for nodes used for base nodes in Graph render and in Node component rendering
     getRadius = (popularity) => (popularity/5 + 2)
-    getLabelText = (node) => <text textAnchor={"middle"} y={node.y + this.getRadius(node.popularity) + 7} x={node.x} dy='.5em'>{node.name}</text>
+    getLabelText = (node) => <text className="label" textAnchor={"middle"} y={node.y + this.getRadius(node.popularity) + 7} x={node.x} dy='.5em'>{node.name}</text>
     getNodeTransform = (node) => 'translate(' + node.x + ',' + node.y + ')'
 
     render() {

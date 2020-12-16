@@ -18,8 +18,14 @@
     stroke-width: .3em;
 }
 
+.label {
+    fill: var(--node-color);
+}
+
 .hidden-label {
     opacity: 0;
+    stroke: var(--node-color);
+    fill: var(--node-color);
 }
 
 .hidden-label:hover {

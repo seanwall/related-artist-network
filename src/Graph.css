@@ -1,5 +1,5 @@
 .graph {
-    background-color: aliceblue;
+    background-color: var(--background-color);
     z-index: 1;
     position: relative;
 }

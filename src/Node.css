@@ -1,6 +1,6 @@
 .node{
-    fill: lightslategrey;
-    stroke: aliceblue;
+    fill: var(--node-color);
+    stroke: var(--background-color);
     stroke-width: .15em;
 }
 
@@ -25,18 +25,18 @@
     fill:var(--active-color);
     cursor: pointer;
     position: relative;
-    stroke: aliceblue;
+    stroke: var(--background-color);
     stroke-width: .1em;
 }
 
 .parent-node{
     fill:var(--parent-color);
-    stroke: aliceblue;
+    stroke: var(--background-color);
     stroke-width: .1em;
 }
 
 .child-node{
     fill:var(--child-color);
-    stroke: aliceblue;
+    stroke: var(--background-color);
     stroke-width: .1em;
 }

@@ -17,9 +17,11 @@ code {
 }
 
 :root {
-  --child-color: steelblue;
-  --parent-color: slateblue;
-  --active-color: cadetblue;
+  --child-color: #A0C1B8;
+  --parent-color: #726A95;
+  --active-color: #709FB0;
+  --node-color: grey;
+  --background-color: white;
 }
 
 @import "~bootstrap/dist/css/bootstrap.min.css";

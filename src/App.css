@@ -16,6 +16,10 @@
   z-index: 2;
 }
 
+.container-fluid {
+  background-color: var(--background-color);
+}
+
 button {
   border: none;
   background-color: lightslategrey;
