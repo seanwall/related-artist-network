@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/related-artist-network/static/css/main.0a0c70ce.chunk.css",
-    "main.js": "/related-artist-network/static/js/main.f11edf36.chunk.js",
-    "main.js.map": "/related-artist-network/static/js/main.f11edf36.chunk.js.map",
+    "main.css": "/related-artist-network/static/css/main.4c9fe29d.chunk.css",
+    "main.js": "/related-artist-network/static/js/main.03fe01b1.chunk.js",
+    "main.js.map": "/related-artist-network/static/js/main.03fe01b1.chunk.js.map",
     "runtime-main.js": "/related-artist-network/static/js/runtime-main.533e9801.js",
     "runtime-main.js.map": "/related-artist-network/static/js/runtime-main.533e9801.js.map",
     "static/css/2.2a86faee.chunk.css": "/related-artist-network/static/css/2.2a86faee.chunk.css",
-    "static/js/2.ca247530.chunk.js": "/related-artist-network/static/js/2.ca247530.chunk.js",
-    "static/js/2.ca247530.chunk.js.map": "/related-artist-network/static/js/2.ca247530.chunk.js.map",
+    "static/js/2.19b2d389.chunk.js": "/related-artist-network/static/js/2.19b2d389.chunk.js",
+    "static/js/2.19b2d389.chunk.js.map": "/related-artist-network/static/js/2.19b2d389.chunk.js.map",
     "index.html": "/related-artist-network/index.html",
-    "precache-manifest.5a18e27d41ba4ff4822cd07ef038c7be.js": "/related-artist-network/precache-manifest.5a18e27d41ba4ff4822cd07ef038c7be.js",
+    "precache-manifest.a84dcbec9c8c36b5a9d9b5652bada8cc.js": "/related-artist-network/precache-manifest.a84dcbec9c8c36b5a9d9b5652bada8cc.js",
     "service-worker.js": "/related-artist-network/service-worker.js",
     "static/css/2.2a86faee.chunk.css.map": "/related-artist-network/static/css/2.2a86faee.chunk.css.map",
-    "static/css/main.0a0c70ce.chunk.css.map": "/related-artist-network/static/css/main.0a0c70ce.chunk.css.map",
-    "static/js/2.ca247530.chunk.js.LICENSE.txt": "/related-artist-network/static/js/2.ca247530.chunk.js.LICENSE.txt"
+    "static/css/main.4c9fe29d.chunk.css.map": "/related-artist-network/static/css/main.4c9fe29d.chunk.css.map",
+    "static/js/2.19b2d389.chunk.js.LICENSE.txt": "/related-artist-network/static/js/2.19b2d389.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.533e9801.js",
     "static/css/2.2a86faee.chunk.css",
-    "static/js/2.ca247530.chunk.js",
-    "static/css/main.0a0c70ce.chunk.css",
-    "static/js/main.f11edf36.chunk.js"
+    "static/js/2.19b2d389.chunk.js",
+    "static/css/main.4c9fe29d.chunk.css",
+    "static/js/main.03fe01b1.chunk.js"
   ]
 }
