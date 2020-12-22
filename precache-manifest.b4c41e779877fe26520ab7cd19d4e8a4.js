@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e867ddd01b68163b87deb7cf0022325e",
+    "revision": "284a8bb3d1e2194a8de9d6b6f015f96f",
     "url": "/related-artist-network/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/related-artist-network/static/css/2.2a86faee.chunk.css"
   },
   {
-    "revision": "0d60b8d72c0dba70b9c9",
-    "url": "/related-artist-network/static/css/main.4c9fe29d.chunk.css"
+    "revision": "91e919e251fb9970bf88",
+    "url": "/related-artist-network/static/css/main.5f8c2dfc.chunk.css"
   },
   {
     "revision": "949dcb45ad267c8e3942",
@@ -20,7 +20,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/related-artist-network/static/js/2.19b2d389.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "0d60b8d72c0dba70b9c9",
+    "revision": "91e919e251fb9970bf88",
     "url": "/related-artist-network/static/js/main.03fe01b1.chunk.js"
   },
   {
